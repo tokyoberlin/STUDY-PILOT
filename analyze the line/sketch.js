@@ -3,8 +3,7 @@ let currentDataPointIndex = 0;
 let oldDataPointIndex = 0;
 let frameRateValue = 25;
 let continueAnimation = true;
-let canvasWidth = 1920;
-let canvasHeight = 1080;
+let canvasWidth, canvasHeight;
 let directionIndicatorColor;
 let directionChangeCounter = 0;
 let previousDirection = "left";
@@ -71,11 +70,13 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(window.innerWidth, window.innerHeight);
+  canvasWidth = windowWidth;
+  canvasHeight = windowHeight;
+  createCanvas(canvasWidth, canvasHeight);
   frameRate(frameRateValue);
   directionIndicatorColor = color(0, 255, 0);
   playPauseBtn = createButton('Pause');
-  playPauseBtn.position(50, canvasHeight -100);
+  playPauseBtn.position(50, canvasHeight - 100);
   playPauseBtn.mousePressed(toggleAnimation);
 }
 
