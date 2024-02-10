@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clickable Fields</title>
+    <style>
+        @font-face {
+            font-family: 'CustomFont'; /* Custom font name */
+            src: url('inktrap.otf') format('opentype'); /* Path to your OTF font file */
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .field {
+            flex: 1;
+            background-color: #778da9; /* Set the default background color */
+            display: flex;
+            align-items: center;
+            padding: 0 20px; /* Add padding for aesthetics */
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-family: 'CustomFont', Arial, sans-serif; /* Apply the custom font */
+            font-size: 57px; /* Increase text size */
+            text-align: left; /* Align text to the left */
+            color: white; /* Set text color to white */
+            text-decoration: none; /* Remove underline for links */
+        }
+        .field:hover {
+            background-color: #fff; /* Set the background color on hover to white */
+            color: #778da9; /* Set text color on hover to the specified color */
+        }
+    </style>
+</head>
+<body>
+    <a href="line1/index.html" class="field">
+        W. A. Mozart: String Quartet in B-flat Major, K 458, “Hunt" Violin 1
+    </a>
+    <a href="line2/index.html" class="field">
+        W. A. Mozart: String Quartet in B-flat Major, K 458, “Hunt" Violin 2
+    </a>
+    <a href="line3/index.html" class="field">
+        W. A. Mozart: String Quartet in B-flat Major, K 458, “Hunt" Viola 
+    </a>
+    <a href="line4 celo moz/index.html" class="field">
+        W. A. Mozart: String Quartet in B-flat Major, K 458, “Hunt" Violoncello
+    </a>
+    <a href="analyze%20a%20line/5" class="field">
+        J.S. Bach – Goldberg Variations for String Trio - Violin
+    </a>
+    <a href="analyze%20a%20line/6" class="field">
+        J.S. Bach – Goldberg Variations for String Trio - Viola
+    </a>
+    <a href="analyze%20a%20line/7" class="field">
+        J.S. Bach – Goldberg Variations for String Trio - Violoncello
+    </a>
+  
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta charset="utf-8" />
+    <style>
+         @font-face {
+        font-family: 'Inktrap';
+        src: url('inktrap.otf') format('opentype');
+    }
+
+    body {
+        font-family: 'Inktrap', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;
+        margin: 0;
+        padding: 0;
+        overflow: hidden; /* Hide horizontal scrollbar */
+        position: relative; /* Needed for button positioning */
+    }
+
+        .tab {
+            position: absolute;
+            bottom: 20px; /* Adjust the distance from the bottom */
+            left: 20px; /* Adjust the distance from the left */
+            padding: 10px 20px; /* Padding for aesthetics */
+            background-color: #778da9; /* Change this to the desired blue color */
+            color: white; /* Text color */
+            border: none;
+            cursor: pointer;
+            border-radius: 5px; /* Rounded corners */
+        }
+
+        .tab:hover {
+            background-color: #555; /* Darker background color on hover */
+        }
+
+        /* Center the text vertically and horizontally */
+        .tab-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Remove the default link styles */
+        .tab a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Style for the toggle switches */
+        .toggle-switch {
+            position: absolute;
+            bottom: 10px; /* Adjust the distance from the bottom */
+            right: 20px; /* Adjust the distance from the right */
+            padding: 5px 10px; /* Padding for aesthetics */
+            background-color: #778da9; /* Change this to the desired blue color */
+            color: white; /* Text color */
+            border: none;
+            cursor: pointer;
+            border-radius: 5px; /* Rounded corners */
+        }
+
+        /* Style for the toggle switch labels */
+        .toggle-label {
+            margin-right: 5px; /* Adjust spacing between label and switch */
+        }
+        
+        /* Position the toggle switches next to the text */
+        .toggle-switch.violoncello {
+            bottom: 50px;
+            right: 60px;
+        }
+
+        .toggle-switch.viola {
+            bottom: 50px;
+            right: 200px;
+        }
+
+        .toggle-switch.violin {
+            bottom: 50px;
+            right: 300px;
+        }
+
+        /* Style for color circles */
+        .color-circle {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 5px;
+            display: inline-block;
+        }
+
+
+        .color-circle.black {
+            background-color: rgb(118, 159, 225);
+        }
+
+        .color-circle.red {
+            background-color: rgb(33, 67, 108);
+        }
+
+        .color-circle.blue {
+            background-color: blue;
+        }
+
+        /* Style for the top left corner */
+        .top-left {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        /* Style for instrument labels */
+        .instrument-label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <main>
+    </main>
+    
+    
+    <!-- Color circles and labels in the top left corner -->
+    <div class="top-left">
+        <div class="instrument-label">
+            <div class="color-circle black"></div>
+            <span>Violoncello</span>
+        </div>
+        <div class="instrument-label">
+            <div class="color-circle red"></div>
+            <span>Viola</span>
+        </div>
+        <div class="instrument-label">
+            <div class="color-circle blue"></div>
+            <span>Violin</span>
+        </div>
+    </div>
+
+    <div class="tab">
+        <a href="twolines.mp4" target="_self"
+            <div class="tab-content">
+                <h1>Show Video</h1>
+            </div>
+        </a>
+    </div>
+
+    <!-- Toggle switch for Violoncello line -->
+    <div class="toggle-switch violoncello">
+        <label class="toggle-label">Violoncello:</label>
+        <input type="checkbox" id="toggleVioloncelloLine" checked>
+    </div>
+
+    <!-- Toggle switch for Viola line -->
+    <div class="toggle-switch viola">
+        <label class="toggle-label">Viola:</label>
+        <input type="checkbox" id="toggleViolaLine" checked>
+    </div>
+
+    <!-- Toggle switch for Violin line -->
+    <div class="toggle-switch violin">
+        <label class="toggle-label">Violin:</label>
+        <input type="checkbox" id="toggleViolinLine" checked>
+    </div>
+
+    <audio id="audio" controls autoplay="false" volume="0.2" style="position: absolute; bottom: 20px; left: 250px;">
+        <source src="twolines.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script src="threelines.js"></script>
+</body>
+</html>

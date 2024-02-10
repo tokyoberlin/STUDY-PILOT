@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta charset="utf-8" />
+    <style>
+        body {
+
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;
+            overflow: hidden; /* Hide horizontal scrollbar */
+            position: relative; /* Needed for button positioning */
+        }
+
+        /* Include the 'inktrap.otf' font */
+        @font-face {
+            font-family: 'Inktrap';
+            src: url('inktrap.otf') format('opentype');
+        }
+
+        /* Apply the custom font to specific elements */
+        .tab,
+        .tab2,
+        .top-left span,
+        .toggle-label,
+        .go-back-button {
+            font-family: 'Inktrap', sans-serif;
+            
+        }
+
+
+            body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;
+            overflow: hidden; /* Hide horizontal scrollbar */
+            position: relative; /* Needed for button positioning */
+        }
+        
+/* // show video button */
+.tab {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            padding: 1px 10px; /* Adjust padding for smaller size */
+            background-color: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            background-color: #778da9;
+        }
+
+        .tab2 {
+            position: absolute;
+            bottom: 22px;
+            left: 250px;
+            padding: 1px 10px; /* Adjust padding for smaller size */
+            background-color: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            background-color: #778da9;
+        }
+
+        .tab:hover {
+            background-color: #778da9; /* Set the background color */
+        }
+
+        /* Center the text vertically and horizontally */
+        .tab-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #778da9; /* Set the background color */
+        }
+
+        /* Remove the default link styles */
+        .tab a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+               /* Remove the default link styles */
+               .tab2 a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+
+        /* Style for the toggle switches */
+        .toggle-switch {
+            position: absolute;
+            bottom: 10px; /* Adjust the distance from the bottom */
+            right: 20px; /* Adjust the distance from the right */
+            padding: 5px 10px; /* Padding for aesthetics */
+            background-color: #333; /* Background color */
+            color: white; /* Text color */
+            border: none;
+            cursor: pointer;
+            border-radius: 5px; /* Rounded corners */
+            background-color: #778da9; /* Set the background color */
+        }
+
+        /* Style for the toggle switch labels */
+        .toggle-label {
+            margin-right: 5px; /* Adjust spacing between label and switch */
+            
+        }
+
+        /* Position the toggle switches next to the text */
+        .toggle-switch.violoncello {
+            bottom: 50px;
+            right: 20px;
+        }
+
+        .toggle-switch.viola {
+            bottom: 50px;
+            right: 160px;
+        }
+
+        .toggle-switch.violin {
+            bottom: 50px;
+            right: 300px;
+        }
+
+        /* is actually viola */
+        .toggle-switch.violin2 { 
+            bottom: 50px;
+            right: 470px;
+        }
+
+        /* Style for color circles */
+        .color-circle {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 5px;
+            display: inline-block;
+        }
+
+        .color-circle.black {
+            background-color: rgb(71, 156, 221);
+        }
+
+        .color-circle.red {
+            background-color: blue;
+        }
+
+        .color-circle.blue {
+            background-color: rgb(182, 182, 241);
+        }
+
+        .color-circle.green {
+            background-color: black;
+        }
+
+        /* Style for the top left corner */
+        .top-left {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        /* Style for instrument labels */
+        .instrument-label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        /* Style for the "Go Back" button */
+.go-back-button {
+    position: absolute;
+    top: 20px; /* Adjust the distance from the top */
+    right: 20px; /* Adjust the distance from the right */
+    padding: 10px 20px; /* Padding for aesthetics */
+    background-color: #333; /* Background color */
+    color: white; /* Text color */
+    border: none;
+    cursor: pointer;
+    border-radius: 5px; /* Rounded corners */
+    background-color: #778da9; /* Set the background color */
+}
+
+.go-back-button:hover {
+    background-color: #555; /* Darker background color on hover */
+}
+
+    </style>
+</head>
+<body>
+    <main>
+    </main>
+    
+    <!-- Color circles and labels in the top left corner -->
+    <div class="top-left">
+        <div class="instrument-label">
+            <div class="color-circle green"></div>
+            <span>Violoncello</span>
+        </div>
+        <div class="instrument-label">
+            <div class="color-circle red"></div>
+            <span>Viola</span>
+        </div>
+        <div class="instrument-label">
+            <div class="color-circle black"></div>
+            <span>Violin</span>
+        </div>
+
+        <div class="instrument-label">
+            <div class="color-circle blue"></div>
+            <span>Violin 2</span>
+        </div>
+    </div>
+
+    <div class="tab">
+        <a href="4 panel viz.mp4" target="_self">
+            <div class="tab-content">
+                <h1>Four Panels</h1>
+            </div>
+        </a>
+    </div>
+
+    
+    <!-- Add the new button -->
+    <div class="tab2">
+        <a style="text-decoration:none" href="dataonly.mp4" target="_self">
+            <div class="tab-content">
+                <h1>Data Only</h1>
+            </div>
+        </a>
+    </div>
+    
+    <button id="goBackButton" class="go-back-button">Home</button>
+
+   
+
+    <!-- Toggle switch for Violoncello line -->
+    <div class="toggle-switch violoncello">
+        <label class="toggle-label">Violin 2:</label>
+        <input type="checkbox" id="toggleVioloncelloLine" checked>
+    </div>
+
+    <!-- Toggle switch for Viola line -->
+    <div class="toggle-switch viola">
+        <label class="toggle-label">Violin 1:</label>
+        <input type="checkbox" id="toggleViolaLine" checked>
+    </div>
+
+    <!-- Toggle switch for Violin line -->
+    <div class="toggle-switch violin">
+        <label class="toggle-label">Violoncello:</label>
+        <input type="checkbox" id="toggleViolinLine" checked>
+    </div>
+
+    <!-- Toggle switch for Violin 2 line -->
+    <div class="toggle-switch violin2">
+        <label class="toggle-label">Viola:</label>
+        <input type="checkbox" id="toggleViolin2Line" checked>
+    </div>
+
+  <!-- Move the audio player below the "Show Video" button -->
+<audio id="audio" controls autoplay="false" volume="0.1" style="position: absolute; bottom: 40px; left: 450px;">
+    <source src="Mozz.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
+
+    <script src="fourlines.js"></script>
+</body>
+</html>

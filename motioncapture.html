@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brightest Point History</title>
+  <style>
+    @font-face {
+      font-family: 'InkTrap';
+      src: url('inktrap.otf') format('opentype');
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      position: relative;
+      font-family: 'InkTrap', sans-serif;
+      background-color: #e0e1dd;
+    }
+
+    .container {
+      display: flex;
+      align-items: center;
+    }
+
+    #canvas {
+      border: 0px solid #000;
+      height: 70vh;
+    }
+
+    #info,
+#coordinates {
+  margin-left: 100px;
+  font-size: large;
+  text-align: left;
+  font-family: 'InkTrap', monospace; /* Use monospace for consistent character width */
+  display: inline-block;
+  min-width: 200px; /* Adjust the min-width as needed */
+}
+
+    .button-container {
+      display: flex;
+      margin-top: 30px;
+      margin-bottom: 40px;
+    }
+
+    button {
+      margin: 5px;
+      padding: 10px 20px;
+      background-color: #778da9;
+      color: white;
+      border: none;
+      font-family: 'InkTrap', Arial, sans-serif;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.3s;
+      outline: none;
+    }
+
+    button:hover {
+      background-color: white;
+      color: #778da9;
+    }
+  </style>
+</head>
+<body>
+  <div style="display: flex; flex-direction: column; align-items: center;">
+    <canvas id="canvas" width="640" height="480" willReadFrequently="true"></canvas>
+    <canvas id="lineCanvas" width="640" height="100"></canvas>
+  </div>
+  <div class="container">
+    <div id="info"></div>
+    <div id="coordinates"></div>
+    <div id="studyPilotText">Study Pilot</div>
+  </div>
+
+  <!-- Button container for placing buttons next to each other -->
+  <div class="button-container">
+    <!-- "Start Tracking" button -->
+    <button id="start-tracking-button">Start Tracking</button>
+    <!-- "Download CSV" button -->
+    <button id="download-button">Download CSV</button>
+  </div>
+
+
+  <script>
+    const canvas = document.getElementById("canvas");
+    const context = canvas.getContext("2d");
+    const infoDiv = document.getElementById("info");
+    const coordinatesDiv = document.getElementById("coordinates");
+    const lineCanvas = document.getElementById("lineCanvas"); // Line canvas
+
+    function drawGrid() {
+      const gridSize = 20; // Size of grid squares
+      const gridColor = "#000"; // Color of grid lines
+
+      for (let x = 0; x < canvas.width; x += gridSize) {
+        context.beginPath();
+        context.moveTo(x, 0);
+        context.lineTo(x, canvas.height);
+        context.strokeStyle = gridColor;
+        context.stroke();
+      }
+
+      for (let y = 0; y < canvas.height; y += gridSize) {
+        context.beginPath();
+        context.moveTo(0, y);
+        context.lineTo(canvas.width, y);
+        context.strokeStyle = gridColor;
+        context.stroke();
+      }
+    }
+
+    let path = [];
+
+    function findBrightestPoint(imageData, threshold) {
+      let brightestIndex = 0;
+      let brightestValue = -1;
+
+      for (let i = 0; i < imageData.length; i += 4) {
+        const brightness = (imageData[i] + imageData[i + 1] + imageData[i + 2]) / 3;
+
+        if (brightness > brightestValue && brightness > threshold) {
+          brightestValue = brightness;
+          brightestIndex = i / 4; // Convert index to pixel position
+        }
+      }
+
+      const x = brightestIndex % canvas.width;
+      const y = Math.floor(brightestIndex / canvas.width);
+
+      return { x, y, brightness: brightestValue, rgb: [imageData[brightestIndex * 4], imageData[brightestIndex * 4 + 1], imageData[brightestIndex * 4 + 2]] };
+    }
+
+    function drawBrightestPoint(brightestPoint) {
+      context.fillStyle = "black";
+      context.beginPath();
+      context.arc(brightestPoint.x, brightestPoint.y, 2.5, 0, Math.PI * 2); // Half the radius
+      context.fill();
+
+      // Connect consecutive points with a line
+      path.push(brightestPoint);
+
+      // Adjust x-coordinates of points for the leftward movement
+      path.forEach((point, index) => {
+        point.x -= 2; // Adjust the speed of movement
+        context.beginPath();
+        context.arc(point.x, point.y, 2.5, 0, Math.PI * 2); // Half the radius
+        context.fill();
+
+        if (index > 0) {
+          context.beginPath();
+          context.moveTo(path[index - 1].x, path[index - 1].y);
+          context.lineTo(point.x, point.y);
+          context.strokeStyle = "black";
+          context.stroke();
+        }
+      });
+
+      // Remove points that have moved off the canvas
+      path = path.filter((point) => point.x > 0);
+
+      // Display coordinates in real-time
+      coordinatesDiv.innerHTML = `X: ${brightestPoint.x}, Y: ${brightestPoint.y}`;
+    }
+
+    function updateCanvas(video) {
+      context.save(); // Save the current state
+      context.scale(-1, 1); // Flip horizontally
+      context.drawImage(video, -canvas.width, 0, canvas.width, canvas.height); // Draw flipped video
+      context.restore(); // Restore to the original state
+
+      const imageData = context.getImageData(0, 0, canvas.width, canvas.height).data;
+      const threshold = 250; // Set the brightness threshold
+
+      const currentBrightestPoint = findBrightestPoint(imageData, threshold);
+
+      // Display coordinates and RGB values in real-time
+      infoDiv.innerHTML = `Brightest Point: X=${currentBrightestPoint.x}, Y=${currentBrightestPoint.y}`;
+
+      // Draw a point on the current brightest spot if above the threshold
+      if (currentBrightestPoint.brightness > threshold) {
+        drawBrightestPoint(currentBrightestPoint);
+      }
+    }
+
+    function startAnimationLoop(video) {
+      requestAnimationFrame(function update() {
+        updateCanvas(video);
+        requestAnimationFrame(update);
+      });
+    }
+
+    function initCamera() {
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function (stream) {
+          const video = document.createElement("video");
+          video.srcObject = stream;
+          video.play();
+
+          video.addEventListener("loadedmetadata", function () {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            lineCanvas.width = canvas.width; // Set line canvas width to match video width
+            document.body.appendChild(canvas);
+
+            startAnimationLoop(video);
+            drawGrid(); // Draw grid lines
+          });
+        })
+        .catch(function (error) {
+          console.error("Error accessing the camera: ", error);
+        });
+    }
+
+    let startTime = 0;
+    let dataToExport = [];
+    let pointHistory = [];
+
+    function exportDataToCSV(data) {
+      const csvContent = "Time,X Position,Y Position\n" + data.map(point => `${point.timestamp},${point.x},${point.y}`).join("\n");
+      const blob = new Blob([csvContent], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'brightest_points.csv';
+      a.click();
+    }
+
+    function drawPointHistory() {
+      // Draw the line on the lineCanvas
+      const lineContext = lineCanvas.getContext("2d");
+      lineContext.clearRect(0, 0, lineCanvas.width, lineCanvas.height); // Clear previous drawings
+      lineContext.beginPath();
+      lineContext.strokeStyle = "black";
+      lineContext.lineWidth = 2;
+      lineContext.moveTo(0, lineCanvas.height / 2); // Start the line at the middle of the canvas
+      
+      if (pointHistory.length > 0) {
+        const currentTime = performance.now();
+        for (let i = 0; i < pointHistory.length; i++) {
+          const point = pointHistory[i];
+          const x = (point.timestamp - startTime) / 20000 * lineCanvas.width; // Scale the x-coordinate based on time
+          const y = lineCanvas.height / 2 + (point.y - canvas.height / 2); // Adjust y-coordinate to match brightest point
+          
+          // Limit y-coordinate within the bounds of the white frame
+          const minY = 0;
+          const maxY = canvas.height;
+          lineContext.lineTo(x, Math.min(Math.max(y, minY), maxY));
+        }
+      }
+      
+      lineContext.stroke();
+    }
+
+    function updateCanvas(video, currentTime) {
+      context.save();
+      context.scale(-1, 1);
+      context.drawImage(video, -canvas.width, 0, canvas.width, canvas.height);
+      context.restore();
+
+      const imageData = context.getImageData(0, 0, canvas.width, canvas.height).data;
+      const threshold = 250;
+
+      const currentBrightestPoint = findBrightestPoint(imageData, threshold);
+
+      infoDiv.innerHTML = `Brightest Point: X=${currentBrightestPoint.x}, Y=${currentBrightestPoint.y}`;
+
+      if (currentBrightestPoint.brightness > threshold) {
+        const currentTime = performance.now();
+        drawBrightestPoint(currentBrightestPoint);
+        const dataPoint = { x: currentBrightestPoint.x, y: currentBrightestPoint.y, timestamp: currentTime };
+        dataToExport.push(dataPoint);
+
+        // Add the tracked point to the history with a timestamp
+        pointHistory.push(dataPoint);
+      }
+
+      // Remove points from history older than 20 seconds
+      const twentySecondsAgo = currentTime - 2000000;
+      pointHistory = pointHistory.filter(point => point.timestamp >= twentySecondsAgo);
+
+      drawPointHistory();
+
+      // Check if 5 seconds have elapsed
+      if (currentTime - startTime >= 20000000) {
+        exportDataToCSV(dataToExport);
+        dataToExport = [];
+        startTime = currentTime;
+      }
+    }
+
+    function startAnimationLoop(video) {
+      let lastTimestamp = 0;
+      requestAnimationFrame(function update(timestamp) {
+        const deltaTime = timestamp - lastTimestamp;
+        lastTimestamp = timestamp;
+
+        updateCanvas(video, timestamp);
+
+        requestAnimationFrame(update);
+      });
+    }
+
+    function initCamera() {
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function (stream) {
+          const video = document.createElement("video");
+          video.srcObject = stream;
+          video.play();
+
+          video.addEventListener("loadedmetadata", function () {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            lineCanvas.width = canvas.width; // Set line canvas width to match video width
+            document.body.appendChild(canvas);
+
+            startTime = performance.now(); // Record the start time
+            startAnimationLoop(video);
+            drawGrid(); // Draw grid lines
+          });
+        })
+        .catch(function (error) {
+          console.error("Error accessing the camera: ", error);
+        });
+    }
+
+    initCamera();
+
+    const downloadButton = document.getElementById("download-button");
+    downloadButton.addEventListener("click", () => {
+      // Export the data to CSV when the button is clicked
+      exportDataToCSV(dataToExport);
+    });
+
+  </script>
+</body>
+</html>

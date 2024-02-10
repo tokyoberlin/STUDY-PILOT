@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page with Background Video</title>
+    <style>
+        @font-face {
+            font-family: 'InkTrap'; /* Custom font name */
+            src: url('inktrap.otf') format('opentype'); /* Path to your OTF font file */
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'InkTrap', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden; /* Hide horizontal scrollbar */
+        }
+
+        .background-video {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -1; /* Place the video behind other content */
+        }
+
+        .tabs-container {
+            display: flex;
+            flex-direction: row; /* Display tabs horizontally */
+            width: 100vw; /* Fill the entire viewport width */
+        }
+
+        .tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(119, 141, 169, 0.5); /* Set the default semi-transparent background color */
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s; /* Add color transition */
+    padding: 10px;
+}
+
+.tab:hover {
+    background-color: #778da9; /* Set the background color on hover to #778da9 */
+    color: rgba(119, 141, 169, 1); /* Set text color on hover to the specified color */
+}
+
+
+
+
+        .tab-content {
+            text-align: center;
+            color: white; /* Text color on dark background */
+            font-size: 0.7em;
+            margin: 0 auto; /* Center text horizontally */
+        }
+
+        /* Add styles for the links */
+        .tab a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* New tabs container style */
+        .new-tabs-container {
+            display: flex;
+            justify-content: center; /* Center the tabs horizontally */
+            background-color: rgba(119, 141, 169, 0.5); /* Semi-transparent black background */
+            text-align: center;
+            padding: 10px;
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            z-index: 2; /* Place the new tabs above the video */
+        }
+
+        /* Style for link text in the new tabs */
+        .new-tab {
+            flex: 1; /* Equal width for both tabs */
+            padding: 10px;
+        }
+
+        .new-tab a {
+            color: white; /* Plain white color for the link text */
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <video class="background-video" autoplay muted loop>
+        <source src="opening.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <div class="tabs-container">
+        <div class="tab">
+            <a href="play-a-line.html">
+                <div class="tab-content">
+                    <h1>Play a Line</h1>
+                </div>
+            </a>
+        </div>
+        <div class="tab">
+            <a href="motioncapture.html">
+                <div class="tab-content">
+                    <h1>Motion Capture</h1>
+                </div>
+            </a>
+        </div>
+        <div class="tab">
+            <a href="analyze the line/index.html">
+                <div class="tab-content">
+                    <h1>Analyze your line</h1>
+                </div>
+            </a>
+        </div>
+        <div class="tab">
+            <a href="compare two lines/index.html">
+                <div class="tab-content">
+                    <h1>Compare your line</h1>
+                </div>
+            </a>
+        </div>
+        <div class="tab">
+            <a href="LEARN LINES TAB/learnindex.html">
+                <div class="tab-content">
+                    <h1>Learn</h1>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- New tabs container with links to "Bach.html" and "Mozart.html" -->
+    <div class="new-tabs-container">
+        <!-- Tab for "Bach.html" -->
+        <div class="new-tab">
+            <a href="BACH/index.html">
+                <h1>J.S. Bach – Goldberg Variations for String Trio</h1>
+            </a>
+        </div>
+
+        <!-- Tab for "Mozart.html" -->
+        <div class="new-tab">
+            <a href="Quartett - Mozart/index4lines.html">
+                <h1>Mozart: String Quartet in B-flat Major, K 458, “Hunt”</h1>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
